@@ -2,6 +2,7 @@ package ua.kpi.comsys.geneticalgorithm
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import com.google.android.material.textfield.TextInputEditText
@@ -79,14 +80,15 @@ class MainActivity : AppCompatActivity() {
     private fun calculate(a: Int, b: Int, c: Int, d: Int, y: Int, iterations: Int): IntArray {
         var population = generateStartPopulation(y, 100)
         var populationFitness = calculatePopulationFitness(population, intArrayOf(a, b, c, d), y)
-
+        val mutationProbability = 1f
         repeat(iterations) {
             val solutionIndex = checkZeroFitness(populationFitness)
             if (solutionIndex != -1) {
+                Log.d("Info3", "Mutation probability: $mutationProbability, iterations: ${it + 1}")
                 return population[solutionIndex]
             }
             population = crossover(population, populationFitness)
-            mutate(population, 0.01f)
+            mutate(population, mutationProbability)
             populationFitness = calculatePopulationFitness(population, intArrayOf(a, b, c, d), y)
         }
 
